@@ -1,0 +1,16 @@
+{
+  "name": "ez-starter-kit",
+  "owner": {
+    "name": "eslidiingz"
+  },
+  "metadata": {
+    "description": "eslidiingz's project-agnostic Claude Code skills and agents."
+  },
+  "plugins": [
+    {
+      "name": "ez",
+      "source": "./",
+      "description": "Project-agnostic skills and agents: session handoff and more."
+    }
+  ]
+}

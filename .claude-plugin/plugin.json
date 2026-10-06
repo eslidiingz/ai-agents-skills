@@ -1,0 +1,9 @@
+{
+  "name": "ez",
+  "version": "0.1.0",
+  "description": "eslidiingz's starter kit of project-agnostic Claude Code skills and agents.",
+  "author": {
+    "name": "eslidiingz"
+  },
+  "keywords": ["skills", "handoff", "session", "starter-kit"]
+}
