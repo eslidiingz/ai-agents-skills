@@ -5,14 +5,23 @@ Skills are invoked as `/ez:<skill>`.
 
 ## Install
 
-From a clone:
+Add the marketplace first, then install the plugin:
 
 ```bash
-claude plugin marketplace add /path/to/ai-agents-skills
+claude plugin marketplace add eslidiingz/ai-agents-skills
 claude plugin install ez@ez-starter-kit
 ```
 
-Or straight from GitHub once pushed: `claude plugin marketplace add <owner>/ai-agents-skills`.
+Start a new Claude Code session afterwards to pick up the skills.
+Working from a local clone instead? Use the clone's path in place of `eslidiingz/ai-agents-skills`.
+
+> `Plugin "ez" not found in marketplace "ez-starter-kit"` usually means the `marketplace add` step was skipped.
+
+To update later:
+
+```bash
+claude plugin marketplace update ez-starter-kit
+```
 
 ## Skills
 
