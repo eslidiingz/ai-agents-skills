@@ -42,13 +42,15 @@ Give every work item an ID — the project's own (plan step, ticket, issue #) if
 
 | Category | What goes in it |
 |---|---|
-| ✅ Done | merged (repo + PR# + merge sha) · deployed / migrated (env + what) |
+| ✅ Done | merged (PR as `owner/repo#N` + merge sha) · deployed / migrated (env + what) |
 | 🟡 Done in code, not shipped | main files/dirs · reported test results · verified in the app or not · **the next step that can be taken immediately** |
 | 🔴 Blocked on user | each question **with a recommended answer** (so the user can reply "as recommended") · things only the user can do by hand (permissions, credentials, accounts, devices) |
 | ⏸ Not started | queued work + what must be true before it starts |
 | ⚠️ Env / ops | new env vars + defaults · deploy order · local config files edited (and where the original is backed up) · servers stopped · migrations run / pending per environment |
 | 🧪 Test data / side effects | records created or modified in shared environments, and whether they were restored |
 | 🔀 Mixed files | files touched by more than one work item ⇒ must be split by hunk at commit time |
+
+Write every PR as `owner/repo#N` (or its full URL), never a bare `#N`, so `/ez:clear-next-session` can check whether it merged.
 
 Decisions the user made this session go on the relevant item with the date and the note **"decided — don't ask again"**.
 

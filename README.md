@@ -28,6 +28,7 @@ claude plugin marketplace update ez-starter-kit
 | Skill | What it does |
 |---|---|
 | `/ez:next-session [topic]` | Ends a session with a handoff file (done · open · blocked on you · env/ops · proposed order) and a ready-to-paste prompt for the next session. Works with a single repo or a multi-repo workspace. |
+| `/ez:clear-next-session [days=7] [--all] [--dry-run]` | Cleans up old handoffs: deletes every handoff older than `days` (the newest too, once nothing has been updated for that long) and superseded ones whose PRs are all merged/closed; open items carry over into the handoff that stays. Works without git. |
 
 ## Layout
 
