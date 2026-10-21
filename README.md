@@ -17,11 +17,17 @@ Working from a local clone instead? Use the clone's path in place of `eslidiingz
 
 > `Plugin "ez" not found in marketplace "ez-starter-kit"` usually means the `marketplace add` step was skipped.
 
-To update later:
+## Update
+
+Refresh the marketplace, then update the plugin:
 
 ```bash
 claude plugin marketplace update ez-starter-kit
+claude plugin update ez@ez-starter-kit
 ```
+
+Start a new Claude Code session afterwards to apply the update.
+If the second command reports "already at the latest version", the plugin is up to date.
 
 ## Skills
 
