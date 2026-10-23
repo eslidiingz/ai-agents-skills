@@ -33,8 +33,8 @@ If the second command reports "already at the latest version", the plugin is up 
 
 | Skill | What it does |
 |---|---|
-| `/ez:next-session [topic]` | Ends a session with a handoff file (done · open · blocked on you · env/ops · proposed order) and a ready-to-paste prompt for the next session. Works with a single repo or a multi-repo workspace. |
-| `/ez:clear-next-session [days=7] [--all] [--dry-run]` | Cleans up old handoffs: deletes every handoff older than `days` (the newest too, once nothing has been updated for that long) and superseded ones whose PRs are all merged/closed; open items carry over into the handoff that stays. Works without git. |
+| `/ez:next-session [topic]` | Ends a session with a handoff file (done · open · blocked on you · env/ops · proposed order) and a ready-to-paste prompt for the next session, then replaces the handoff it started from (open items carry over). Each stream of work keeps one handoff, so parallel sessions never overwrite each other. Works with a single repo or a multi-repo workspace. |
+| `/ez:clear-next-session [days=7] [--all] [--dry-run]` | Cleans up old handoffs per stream: deletes every handoff older than `days` (a stream's newest too, once nobody has continued it that long) and superseded ones whose PRs are all merged/closed; open items carry over into the same stream's handoff that stays. Works without git. |
 
 ## Layout
 

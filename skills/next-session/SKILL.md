@@ -27,7 +27,7 @@ It reports, for the root repo and every git repo one level below it: branch, bas
 Set `HANDOFF_BASE=origin/<branch>` if the project integrates on a branch the script can't guess, and `HANDOFF_FETCH=0` when offline.
 
 Also check, when they apply:
-- previous handoff notes in the session's memory directory (if the session has one) — the newest one is what this handoff replaces;
+- the **predecessor**: the handoff this session was told to read when it started (the path in the starter prompt that opened it). Read it — this handoff replaces it, so its open items must carry over (step 3). No predecessor in this conversation → this is a new stream; replace nothing. Other `next-session-*.md` files belong to other sessions: leave them alone;
 - running dev servers or background tasks (e.g. `preview_list`, background shells) — which are running, which you stopped;
 - project plan / task files the session worked from (a `PLAN.md`, `TODO.md`, issue tracker IDs, etc.).
 
@@ -50,7 +50,7 @@ Give every work item an ID — the project's own (plan step, ticket, issue #) if
 | 🧪 Test data / side effects | records created or modified in shared environments, and whether they were restored |
 | 🔀 Mixed files | files touched by more than one work item ⇒ must be split by hunk at commit time |
 
-Write every PR as `owner/repo#N` (or its full URL), never a bare `#N`, so `/ez:clear-next-session` can check whether it merged.
+Write every PR as `owner/repo#N` (or its full URL), never a bare `#N`, so the next session can check whether it merged.
 
 Decisions the user made this session go on the relevant item with the date and the note **"decided — don't ask again"**.
 
@@ -62,19 +62,24 @@ Leave out empty categories.
 - If this session has a persistent memory directory (the system prompt names one), write it there as a `project` memory and add an index line to that directory's `MEMORY.md`.
 - Otherwise write to `<project root>/.claude/handoffs/`. If that path isn't git-ignored, tell the user so they can decide whether to ignore it — don't edit `.gitignore` yourself.
 
-**Name:** `next-session-<YYYY-MM-DD>.md`. If one already exists for today, append `-2`, `-3`, … Never overwrite an existing handoff.
+**Stream:** one line of work, named by a short kebab-case slug. Continuing from a predecessor → reuse its stream. New stream → derive the slug from the topic argument or the session's main work (e.g. `payment-refund`). Several sessions can run at once; each stream keeps its own handoff, so they never overwrite each other.
+
+**Name:** `next-session-<YYYY-MM-DD>-<stream>.md`. If that name is taken, append `-2`, `-3`, … Never overwrite an existing handoff — write the new one first, then delete the predecessor (below).
+
+**Carry over before replacing:** every open item (🟡 / 🔴 / ⏸ / ⚠️ / 🧪) in the predecessor must land in the new handoff — under its own category, with its status updated from this session's facts. Drop an item only with evidence it is finished (PR merged, done this session, the user said so), and list it under ✅ Done.
 
 **Template:**
 
 ```markdown
 ---
-name: next-session-<YYYY-MM-DD>
-description: Open work after the <date> session (<topic>) — replaces <previous handoff or "none">; status per item, questions for the user, proposed order
+name: next-session-<YYYY-MM-DD>-<stream>
+description: Open work in stream <stream> after the <date> session (<topic>) — replaces <predecessor file or "none">; status per item, questions for the user, proposed order
 metadata:
   type: project
+  stream: <stream>
 ---
 
-Session <date> · <topic> · ended because <cost / end of day / context full> · previous: [[<previous handoff>]]
+Session <date> · stream <stream> · <topic> · ended because <cost / end of day / context full> · replaces: <predecessor file name or "none">
 
 ## ✅ Done
 ## Status per item
@@ -91,15 +96,17 @@ Session <date> · <topic> · ended because <cost / end of day / context full> ·
 **How to apply:** at the start of the next session read this file, then re-check `git status` and `git log <base>..HEAD` in each repo listed before acting; remove questions once answered.
 ```
 
-If you wrote to a memory directory:
-- add `- [Open work after <date> session → continue](next-session-<date>.md) — <one-line highlight>` to `MEMORY.md`;
-- mark the previous handoff's index line `(superseded — see <date>)`. Don't delete old handoff files.
+**Then delete the predecessor** — only after the new file is written, and only that one file. If it is already gone (another session started from the same handoff and replaced it first), skip. Never delete any other handoff: they belong to other sessions.
+
+In a memory directory, `MEMORY.md` gets one line per stream: replace the predecessor's line, or add one for a new stream — `- [Open work: <stream> after <date> → continue](next-session-<date>-<stream>.md) — <one-line highlight>`.
+
+Each stream keeps exactly one handoff. Streams nobody continues are cleaned up by `/ez:clear-next-session`.
 
 **Never write** secret values, tokens, passwords, OTPs, or real customer personal data. Env var *names* are fine; their values are not.
 
 ## 4) Reply in chat
 
-1. A summary of **at most 10 lines**: what got done · what is still open · how many questions are waiting on the user · the path of the handoff file.
+1. A summary of **at most 10 lines**: what got done · what is still open · how many questions are waiting on the user · the path of the handoff file · the predecessor deleted (or "new stream").
 2. The **starter prompt** in a single ```` ```text ```` block, so it copies in one go:
 
 ```text
